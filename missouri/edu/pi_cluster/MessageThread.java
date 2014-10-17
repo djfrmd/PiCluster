@@ -6,7 +6,6 @@ public class MessageThread extends Thread {
 
 	public MessageThread(String msg, PrintWriter out){
 		super();
-		System.out.println("Created MessageThread");
 		message = msg;
 		output  = out;
 		start();
@@ -15,7 +14,6 @@ public class MessageThread extends Thread {
 	@Override
 	public void run(){
 		
-		System.out.println("The MessageThread is running");
 		System.out.println(message);
 		reply(message);
 		

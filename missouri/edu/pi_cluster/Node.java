@@ -37,14 +37,9 @@ public class Node{
 			}
 	    	
 	    	// Handle messages
-	    	String msg = "This should never be printed";
 	    	try {
-	    		
 				while((msg = input.readLine()) != null){
-					
-					System.out.println("inside loop");
 					new MessageThread(msg, output);
-					
 				}
 			} catch (IOException e) {
 				Log.write(e.getStackTrace());
