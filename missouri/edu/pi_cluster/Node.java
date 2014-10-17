@@ -34,7 +34,7 @@ public class Node{
 				input  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			} catch (IOException e) {
 				Log.write(e.getStackTrace());
-				System.exit(1);
+				continue;
 			}
 	    	
 	    	// Handle messages
