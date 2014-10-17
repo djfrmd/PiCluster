@@ -14,6 +14,7 @@ public class Node{
     	
         int            MASTER_PORT = 2000;
         String         MASTER      = "10.100.100.2";
+        String         msg;
         Socket         socket      = null;
         PrintWriter    output      = null;
         BufferedReader input       = null;

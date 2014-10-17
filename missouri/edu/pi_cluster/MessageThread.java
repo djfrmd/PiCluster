@@ -25,7 +25,7 @@ public class MessageThread extends Thread {
 //	}
 	
 	private void reply(String msg){
-		output.write(msg);
+		output.println(msg);
 	}
 	
 	private String      message;
