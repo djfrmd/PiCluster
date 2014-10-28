@@ -48,6 +48,7 @@ public class Node{
 	    	
 	    	// Close socket and try to reconnect
 	    	try {
+	    		System.out.println("Socket being closed");
 				socket.close();
 			} catch (IOException e) {
 				Log.write(e.getStackTrace());

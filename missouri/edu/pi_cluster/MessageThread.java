@@ -28,6 +28,15 @@ public class MessageThread extends Thread {
 		output.println(msg);
 	}
 	
+	@SuppressWarnings("unused")
+	private void boardReset(){
+		 /* Brandon, this is a stub for the board reset functionality
+		  * You can change the input and output parameters as you see
+		  * fit.  I will remove the unused warning when I create the 
+		  * parser.
+		  */
+	}
+	
 	private String      message;
 	private PrintWriter output;
 }
