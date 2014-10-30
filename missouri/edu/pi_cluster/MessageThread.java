@@ -1,13 +1,14 @@
 package missouri.edu.pi_cluster;
 
-import java.io.PrintWriter;
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.UnknownHostException;
 
 public class MessageThread extends Thread {
 
-	public MessageThread(String msg, PrintWriter out){
+	public MessageThread(String message, DatagramSocket socket){
 		super();
-		message = msg;
-		output  = out;
+		this.message = message;
 		start();
 	}
 	
@@ -15,18 +16,18 @@ public class MessageThread extends Thread {
 	public void run(){
 		
 		System.out.println(message);
-		reply(message);
+		
+		try {
+			reply(message);
+		} catch (UnknownHostException e) {
+			Log.write(e.getStackTrace());
+		} catch (IOException e) {
+			Log.write(e.getStackTrace());
+		}
 		
 	}
 	
-//	private String[] parseMessage(){
-//		String[] returnStr = message.split(".");
-//		return returnStr;
-//	}
-	
-	private void reply(String msg){
-		output.println(msg);
-	}
+	private void reply(String msg) throws IOException{}
 	
 	@SuppressWarnings("unused")
 	private void boardReset(){
@@ -37,6 +38,5 @@ public class MessageThread extends Thread {
 		  */
 	}
 	
-	private String      message;
-	private PrintWriter output;
+	private String         message;
 }
