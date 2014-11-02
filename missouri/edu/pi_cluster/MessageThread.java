@@ -35,17 +35,41 @@ public class MessageThread extends Thread {
 	private void handle(String msg){
 		
 		String[] args = msg.split(":");
-		if(args[0].trim().equals("exit")){
-			reply("exit");
+		String cmd = args[0].trim();
+		if(cmd.equals("exit")){
+			exit();
+		}else if(cmd.equals("reset")){
+			system("shutdown -r now");
+		}else if(cmd.equals("shutdown")){
+			system("shutdown -h now");
 		}
 		
+	}
+	
+	private void exit(){
+		reply("exit");
+		try {
+			sleep(timeout_ms);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void system(String msg){
+		try {
+			Runtime.getRuntime().exec(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		exit();
 	}
 	
 	private void reply(String msg){
 		messages.add(msg);
 	}
 	
-	private DatagramSocket socket   = null;
-	private MessageList    messages = null;
+	private DatagramSocket socket     = null;
+	private MessageList    messages   = null;
+	private final int      timeout_ms = 10000;
 	
 }

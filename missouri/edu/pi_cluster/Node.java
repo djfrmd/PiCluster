@@ -39,7 +39,7 @@ public class Node{
     			while(!msgList.isEmpty()){
     				
     				// Send all messages
-    				msg    = msgList.remove();
+    				msg = msgList.remove();
     				if(msg.equals("exit")){
     					socket.close();
     					System.exit(1);
