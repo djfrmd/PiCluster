@@ -1,10 +1,7 @@
 package missouri.edu.pi_cluster;
 
 import java.io.IOException;
-
-
 import com.pi4j.io.gpio.PinState;
-//import com.pi4j.io.gpio.PinState;
 import com.pi4j.system.SystemInfo;
 
 public class TemperatureThread extends Thread {

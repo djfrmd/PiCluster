@@ -31,11 +31,7 @@ public class TxThread extends Thread {
             if(!messages.isEmpty()){
                 
                 // Send a messages
-                msg = messages.remove();
-                if(msg.equals("exit")){
-                    socket.close();
-                    System.exit(1);
-                }
+                msg    = messages.remove();
                 packet = new DatagramPacket(msg.getBytes(),
                                             msg.getBytes().length,
                                             address,

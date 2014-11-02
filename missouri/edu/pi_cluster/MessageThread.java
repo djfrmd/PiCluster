@@ -16,9 +16,6 @@ public class MessageThread extends Thread {
         String[] args = message.split(":");
         String cmd = args[0].trim();
         switch (cmd) {
-            case "exit":
-                exit();
-                break;
             case "reset":
                 system("shutdown -r now");
                 break;

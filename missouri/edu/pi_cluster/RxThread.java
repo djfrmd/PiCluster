@@ -17,14 +17,23 @@ public class RxThread extends Thread {
 	    
 		while(!socket.isClosed()){
 		    
+		    String msg;
+		    
 		    // Receive messages
 			try{
 				byte[] buf = new byte[100];
 				DatagramPacket packet = new DatagramPacket(buf, buf.length);
 				socket.receive(packet);
 				
+				// Exit on "exit"
+				msg = new String(packet.getData());
+				if(msg.trim().equals("exit")){
+				    socket.close();
+				    System.exit(1);;
+				}
+				
 				// Create a MessageThread to handle messages
-				new MessageThread(new String(packet.getData()), messages).start();	
+				new MessageThread(msg, messages).start();	
 				
 			}catch(IOException e){
 				e.printStackTrace();
