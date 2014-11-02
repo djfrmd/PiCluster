@@ -1,42 +1,51 @@
 package missouri.edu.pi_cluster;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.UnknownHostException;
 
 public class MessageThread extends Thread {
 
-	public MessageThread(String message, DatagramSocket socket){
-		super();
-		this.message = message;
-		start();
+	public MessageThread(DatagramSocket socket, MessageList msgList){
+		super("MsgThread");
+		this.socket   = socket;
+		this.messages = msgList;
 	}
 	
 	@Override
 	public void run(){
+		while(true){
+			try{
+				byte[] buf = new byte[256];
+				DatagramPacket packet = new DatagramPacket(buf, buf.length);
+				socket.receive(packet);
+				
+				String msg = new String(packet.getData());
+				msg += ":" + packet.getAddress().getHostAddress();
+				System.out.println(msg);
+				handle(msg);
+			}catch(IOException e){
+				e.printStackTrace();
+				break;
+			}
+		}
+		socket.close();
+	}
+	
+	private void handle(String msg){
 		
-		System.out.println(message);
-		
-		try {
-			reply(message);
-		} catch (UnknownHostException e) {
-			Log.write(e.getStackTrace());
-		} catch (IOException e) {
-			Log.write(e.getStackTrace());
+		String[] args = msg.split(":");
+		if(args[0].trim().equals("exit")){
+			reply("exit");
 		}
 		
 	}
 	
-	private void reply(String msg) throws IOException{}
-	
-	@SuppressWarnings("unused")
-	private void boardReset(){
-		 /* Brandon, this is a stub for the board reset functionality
-		  * You can change the input and output parameters as you see
-		  * fit.  I will remove the unused warning when I create the 
-		  * parser.
-		  */
+	private void reply(String msg){
+		messages.add(msg);
 	}
 	
-	private String         message;
+	private DatagramSocket socket   = null;
+	private MessageList    messages = null;
+	
 }
