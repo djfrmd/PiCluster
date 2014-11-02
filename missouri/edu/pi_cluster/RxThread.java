@@ -14,9 +14,12 @@ public class RxThread extends Thread {
 	
 	@Override
 	public void run(){
-		while(true){
+	    
+		while(!socket.isClosed()){
+		    
+		    // Receive messages
 			try{
-				byte[] buf = new byte[256];
+				byte[] buf = new byte[100];
 				DatagramPacket packet = new DatagramPacket(buf, buf.length);
 				socket.receive(packet);
 				
@@ -25,10 +28,9 @@ public class RxThread extends Thread {
 				
 			}catch(IOException e){
 				e.printStackTrace();
-				break;
 			}
 		}
-		socket.close();
+
 	}
 	
 	private DatagramSocket socket   = null;

@@ -1,7 +1,6 @@
 package missouri.edu.pi_cluster;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
@@ -12,10 +11,9 @@ public class Node{
         int            MASTER_PORT = 2000;
         String         host        = "10.100.100.2";
         DatagramSocket socket      = null;
-        DatagramPacket packet      = null;
         InetAddress    address     = null;
-        String         msg         = null;
         MessageList    msgList     = new MessageList();
+        final int      timeout_ms  = 10000;
         
     	while(true){
     		
@@ -33,27 +31,15 @@ public class Node{
 	    	// Create helper threads
 			new TemperatureThread(msgList).start();
 			new RxThread(socket, msgList).start();
+			new TxThread(socket, address, MASTER_PORT, msgList).start();
 			
-    		while(true){
-    			
-    			while(!msgList.isEmpty()){
-    				
-    				// Send all messages
-    				msg = msgList.remove();
-    				if(msg.equals("exit")){
-    					socket.close();
-    					System.exit(1);
-    				}
-    				packet = new DatagramPacket(msg.getBytes(), msg.length(), address, MASTER_PORT);
-    				try {
-						socket.send(packet);
-					} catch (IOException e) {
-						Log.write(e.getStackTrace());
-						socket.close();
-						break;
-					}
-    			}
-    			
+			// Do nothing while the socket is open
+    		while(!socket.isClosed()){
+    		    try {
+                    Thread.sleep(timeout_ms);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
     		}
 	    	
     	}
