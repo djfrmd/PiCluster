@@ -14,7 +14,8 @@ public class MessageThread extends Thread {
     public void run() {
 
         String[] args = message.split(":");
-        switch (args[0].trim()) {
+        String cmd = args[0].trim();
+        switch (cmd) {
             case "exit":
                 exit();
                 break;
@@ -25,8 +26,8 @@ public class MessageThread extends Thread {
                 system("shutdown -h now");
                 break;
             default:
-                System.out.println(args[0]);
-                Log.write("Unknown message: " + args[0]);
+                System.out.println(cmd);
+                Log.write("Unknown message: " + cmd);
                 break;
         }
 
