@@ -1,75 +1,61 @@
 package missouri.edu.pi_cluster;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 
 public class MessageThread extends Thread {
 
-	public MessageThread(DatagramSocket socket, MessageList msgList){
-		super("MsgThread");
-		this.socket   = socket;
-		this.messages = msgList;
-	}
-	
-	@Override
-	public void run(){
-		while(true){
-			try{
-				byte[] buf = new byte[256];
-				DatagramPacket packet = new DatagramPacket(buf, buf.length);
-				socket.receive(packet);
-				
-				String msg = new String(packet.getData());
-				msg += ":" + packet.getAddress().getHostAddress();
-				System.out.println(msg);
-				handle(msg);
-			}catch(IOException e){
-				e.printStackTrace();
-				break;
-			}
-		}
-		socket.close();
-	}
-	
-	private void handle(String msg){
-		
-		String[] args = msg.split(":");
-		String cmd = args[0].trim();
-		if(cmd.equals("exit")){
-			exit();
-		}else if(cmd.equals("reset")){
-			system("shutdown -r now");
-		}else if(cmd.equals("shutdown")){
-			system("shutdown -h now");
-		}
-		
-	}
-	
-	private void exit(){
-		reply("exit");
-		try {
-			sleep(timeout_ms);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void system(String msg){
-		try {
-			Runtime.getRuntime().exec(msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		exit();
-	}
-	
-	private void reply(String msg){
-		messages.add(msg);
-	}
-	
-	private DatagramSocket socket     = null;
-	private MessageList    messages   = null;
-	private final int      timeout_ms = 10000;
-	
+    public MessageThread(String msg, MessageList msgList) {
+        super("MsgThread");
+        this.message = msg;
+        this.messages = msgList;
+    }
+
+    @Override
+    public void run() {
+
+        String[] args = message.split(":");
+        switch (args[0].trim()) {
+            case "exit":
+                exit();
+                break;
+            case "reset":
+                system("shutdown -r now");
+                break;
+            case "shutdown":
+                system("shutdown -h now");
+                break;
+            default:
+                System.out.println(args[0]);
+                Log.write("Unknown message: " + args[0]);
+                break;
+        }
+
+    }
+
+    private void exit() {
+        reply("exit");
+        try {
+            sleep(timeout_ms);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void system(String msg) {
+        try {
+            Runtime.getRuntime().exec(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        exit();
+    }
+
+    private void reply(String msg) {
+        messages.add(msg);
+    }
+
+    private MessageList messages   = null;
+    private String      message    = null;
+    private final int   timeout_ms = 10000;
+
 }

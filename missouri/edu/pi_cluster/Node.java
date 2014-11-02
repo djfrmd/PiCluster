@@ -32,7 +32,7 @@ public class Node{
 	    	
 	    	// Create helper threads
 			new TemperatureThread(msgList).start();
-			new MessageThread(socket, msgList).start();
+			new RxThread(socket, msgList).start();
 			
     		while(true){
     			

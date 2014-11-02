@@ -32,12 +32,12 @@ public class TemperatureThread extends Thread {
 				if(temp > MAX_TEMP){
 					if(!fan_on){
 						GPIO.setPin(Node.FAN, PinState.HIGH);
-						fan_on = !fan_on;
+						fan_on = true;
 					}
 					Log.write("Overtemp @ " + temp);
 				}else if(temp < MAX_TEMP && fan_on){
 					GPIO.setPin(Node.FAN, PinState.LOW);
-					fan_on = !fan_on;
+					fan_on = false;
 				}
 
 			} catch (NumberFormatException | IOException | InterruptedException e) {
