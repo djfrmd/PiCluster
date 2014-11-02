@@ -60,4 +60,9 @@ public class Node{
     	
     }
     
+	public static final int FAN      = 0;
+	public static final int RST_ROW  = 16;
+	public static final int RST_COL  = 15;
+	public static final int RST_UNIT = 27;
+    
 }
